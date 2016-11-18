@@ -1,10 +1,12 @@
 import scrapy
 
-
 class ReviewsSpider(scrapy.Spider):
     name = "reviews"
     pageNum = 0
-    maxPageNum = 9
+    MAX_PAGE_NUM = -1
+    MAX_CHAR_LENGTH = 1100
+    MAX_NUM_COLLECT = 100
+    numCollect = 0
     #titleId -> parsed by script's argument
     urlTemplate = "http://www.imdb.com/title/{title_id}/reviews?start={start_num}"
 
@@ -23,12 +25,20 @@ class ReviewsSpider(scrapy.Spider):
             return
         # Exclude the last one because it is a link to 'Add another review'
         for review in reviews[0:len(reviews)-1]:
+            if(len(review) > self.MAX_CHAR_LENGTH):
+                continue
+
+            self.numCollect += 1
             yield{
-                'review': review
+                #strip <p>...</p> tag
+                'review': review[3:-4]
             }
         self.pageNum += 1
         # stop if the crawling limit is reached
-        if (self.pageNum > self.maxPageNum):
+        if (self.MAX_PAGE_NUM!=-1 and self.pageNum > self.MAX_PAGE_NUM):
+            return
+        # stop if collecting enough reviews
+        if (self.MAX_NUM_COLLECT != -1 and self.numCollect >= self.MAX_NUM_COLLECT):
             return
         # crawl the next page
         yield scrapy.Request(url=self.getCurrentUrl(), callback=self.parse)
