@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#usage: runCrawler.sh {titleId}
-#ex: sh runCrawler.sh tt0418279
+#usage: crawl_reviews.sh {titleId}
+#ex: sh crawl_reviews.sh tt0418279
 
 titleId=$1
 
