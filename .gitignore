@@ -1,3 +1,4 @@
 scrapyIMDB/.idea/*
 scrapyIMDB/data/*.json
 *.pyc
+!scrapyIMDB/data/reviews.bootstrap_tt0133093.json

@@ -12,6 +12,7 @@ class ReviewsSpider(scrapy.Spider):
 
     def start_requests(self):
         self.titleId = getattr(self,'titleId',None)
+        self.MAX_CHAR_LENGTH = int(getattr(self,'maxCharLength','')) if len(getattr(self,'maxCharLength','')) > 0 else self.MAX_CHAR_LENGTH
         yield scrapy.Request(url=self.getCurrentUrl(), callback=self.parse)
 
     def getCurrentUrl(self):
